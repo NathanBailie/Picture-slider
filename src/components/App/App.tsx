@@ -1,58 +1,67 @@
 import 'normalize.css';
 import './app.scss';
+import morning from '../../resources/img/morning.jpg';
+import noon from '../../resources/img/noon.jpg';
+import day from '../../resources/img/day.jpg';
+import evening from '../../resources/img/evening.jpg';
+import midnight from '../../resources/img/midnight.jpg';
+import night from '../../resources/img/night.jpg';
 import uuid from 'react-uuid';
 
 
 const App: React.FC = () => {
 	const sideBar = [
-		{ deg: '229.99deg', color1: '#e1d9d9', percent1: '-26%', color2: '#c1b9b9', percent2: '145%', text: 'Purity', id: uuid() },
-		{ deg: '215.32deg', color1: '#e7d9bf', percent1: '-1%', color2: '#626237', percent2: '124%', text: 'Atmospherics', id: uuid() },
-		{ deg: '221.87deg', color1: '#ffae7e', percent1: '1%', color2: '#050476', percent2: '128%', text: 'Feather', id: uuid() },
-		{ deg: '220.16deg', color1: '#fbfbfb', percent1: '-8%', color2: 'PeachPuff', percent2: '138%', text: 'Room', id: uuid() },
+		{ dir: '230deg', color1: 'rgb(255 241 147)', color2: 'rgb(0 4 157)', text: 'Morning', id: uuid() },
+		{ dir: '230deg', color1: 'rgb(220 217 241)', color2: 'rgb(7 162 221)', text: 'Noon', id: uuid() },
+		{ dir: '230deg', color1: 'rgb(235 235 235)', color2: 'rgb(187 113 21)', text: 'Day', id: uuid() },
+		{ dir: '230deg', color1: '#d3afc5', color2: 'SaddleBrown', text: 'Evening', id: uuid() },
+		{ dir: '230deg', color1: 'rgb(0 228 251)', color2: '#040026', text: 'Midnight', id: uuid() },
+		{ dir: '230deg', color1: 'rgb(130 249 255)', color2: 'black', text: 'Night', id: uuid() },
 	];
 	const main = [
-		{ src: 'https://images.unsplash.com/photo-1674581764363-e6c7d7d61bcf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80', id: uuid() },
-		{ src: 'https://plus.unsplash.com/premium_photo-1669042646106-827cf2484ea9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=711&q=80', id: uuid() },
-		{ src: 'https://plus.unsplash.com/premium_photo-1672976833398-db9d54eec057?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80', id: uuid() },
-		{ src: 'https://plus.unsplash.com/premium_photo-1668104454442-a251cc42ee58?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80', id: uuid() },
+		{ src: night, alt: 'night', id: uuid() },
+		{ src: midnight, alt: 'midnight', id: uuid() },
+		{ src: evening, alt: 'evening', id: uuid() },
+		{ src: day, alt: 'day', id: uuid() },
+		{ src: noon, alt: 'noon', id: uuid() },
+		{ src: morning, alt: 'morning', id: uuid() },
 	];
-	const picturesAmount: number = main.length;
-
+	const picturesAmount: number = main.length - 1;
 	const sideBars = sideBar.map(bar => {
-		const { deg, color1, percent1, color2, percent2, text, id } = bar;
+		const { dir, color1, color2, text, id } = bar;
 		return (
 			<div
 				className='app__leftAsideBar'
 				key={id}
-				style={{ background: `linear-gradient(${deg}, ${color1} ${percent1}, ${color2} ${percent2}` }}
+				style={{ background: `linear-gradient(${dir}, ${color1}, ${color2}` }}
 			>
 				<h2>{text}</h2>
 			</div>
 		);
 	});
 	const mainBars = main.map(bar => {
-		const { src, id } = bar;
+		const { src, alt, id } = bar;
 		return (
 			<div
 				className="app__mainBar"
 				key={id}
-				style={{ backgroundImage: `url(${src})` }}
 			>
+				<img src={src} alt={alt} />
 			</div>
 		);
 	});
-	console.log(mainBars)
 
 
 	return (
 		<div className="app">
 			<div
 				className="app__sideBars"
-			// style={{ transform: `translateY(-${picturesAmount * 100}vh)` }}
 			>
 				{sideBars}
 			</div>
-			<div className="app__mainBars">
+			<div className="app__mainBars"
+				style={{ transform: `translateY(-${picturesAmount * 100}vh)` }}
+			>
 				{mainBars}
 			</div>
 		</div>
