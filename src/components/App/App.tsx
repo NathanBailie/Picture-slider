@@ -6,9 +6,8 @@ import day from '../../resources/img/day.jpg';
 import evening from '../../resources/img/evening.jpg';
 import midnight from '../../resources/img/midnight.jpg';
 import night from '../../resources/img/night.jpg';
-import up from '../../resources/arrows/up.png'
-import down from '../../resources/arrows/down.png'
 import uuid from 'react-uuid';
+import { useState } from 'react';
 
 
 const App: React.FC = () => {
@@ -28,7 +27,11 @@ const App: React.FC = () => {
 		{ src: noon, alt: 'noon', id: uuid() },
 		{ src: morning, alt: 'morning', id: uuid() },
 	];
-	const picturesAmount: number = main.length - 1;
+	const [index, setIndex] = useState(1);
+	const screenHeight = window.innerHeight;
+	const picturesAmount: number = main.length;
+	const [asideDistance, setAsideDistance] = useState(0);
+	const [mainDistance, setMainDistance] = useState((picturesAmount - 1) * screenHeight);
 	const sideBars = sideBar.map(bar => {
 		const { dir, color1, color2, text, textColor, id } = bar;
 		return (
@@ -55,28 +58,63 @@ const App: React.FC = () => {
 		);
 	});
 
+	function onMoveSlidesDown(): void {
+		if (index !== picturesAmount) {
+			setAsideDistance(index * screenHeight);
+			setMainDistance((m) => m - (index + 1 * screenHeight));
+		};
+		if (index === 5) {
+			setMainDistance(0);
+		};
+
+		setIndex((i) => i + 1);
+		if (index === picturesAmount) {
+			setIndex(1);
+			setAsideDistance(0);
+			setMainDistance((picturesAmount - 1) * screenHeight)
+		};
+	};
+
+	function onMoveSlidesUp(): void {
+		setAsideDistance((a) => a - screenHeight);
+		setMainDistance((m) => m + screenHeight)
+		if (index === 1) {
+			setMainDistance(0);
+			setAsideDistance(screenHeight * (picturesAmount - 1));
+		};
+
+		setIndex((i) => i - 1);
+		if (index === 1) {
+			setIndex(picturesAmount)
+		};
+	};
 
 	return (
 		<div className="app">
 			<div
 				className="app__sideBars"
+				style={{ transform: `translateY(-${asideDistance}px)` }}
 			>
 				{sideBars}
-				<div className="app__buttons">
-					<button className="app__up">
-						{/* <img src={up} alt="up-button" /> */}
-						&#11014;
-					</button>
-					<button className="app__down">
-						{/* <img src={down} alt="down-button" /> */}
-						&#11015;
-					</button>
-				</div>
 			</div>
 			<div className="app__mainBars"
-			// style={{ transform: `translateY(-${picturesAmount * 100}vh)` }}
+				style={{ transform: `translateY(-${mainDistance}px)` }}
 			>
 				{mainBars}
+			</div>
+			<div className="app__buttons">
+				<button
+					className="app__up"
+					onClick={() => onMoveSlidesUp()}
+				>
+					&#11014;
+				</button>
+				<button
+					className="app__down"
+					onClick={() => onMoveSlidesDown()}
+				>
+					&#11015;
+				</button>
 			</div>
 		</div>
 	);
